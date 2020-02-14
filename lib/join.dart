@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+<<<<<<< HEAD
 import 'package:workshop/old_lecture.dart';
+=======
+import 'package:workshop/lecture.dart';
+>>>>>>> 4a41f34c5ae4e8051ae5e20b84787d7ce15401e8
 import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';

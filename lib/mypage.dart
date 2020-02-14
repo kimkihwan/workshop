@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:workshop/old_lecture.dart';
+=======
+import 'package:workshop/lecture.dart';
+>>>>>>> 4a41f34c5ae4e8051ae5e20b84787d7ce15401e8
 
 class BodyLayout extends StatefulWidget {
   @override

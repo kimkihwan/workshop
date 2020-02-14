@@ -7,7 +7,11 @@ class PinPut extends StatefulWidget {
     @required this.fieldsCount,
     this.onClear,
     this.spaceBetween = 10.0,
+<<<<<<< HEAD
     this.textStyle = const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+=======
+    this.textStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+>>>>>>> 4a41f34c5ae4e8051ae5e20b84787d7ce15401e8
     this.pasteButtonIcon = const Icon(Icons.content_paste, size: 30),
     this.isTextObscure = false,
     this.keyboardType = TextInputType.text,
@@ -22,7 +26,11 @@ class PinPut extends StatefulWidget {
             EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
         border: OutlineInputBorder(),
         filled: true,
+<<<<<<< HEAD
         fillColor: Color(0xFF1F2232),
+=======
+        fillColor: Colors.white,
+>>>>>>> 4a41f34c5ae4e8051ae5e20b84787d7ce15401e8
         counterText: ''),
     this.containerHeight = 50.0,
   }) : assert(fieldsCount > 0);
