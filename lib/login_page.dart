@@ -15,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   TextStyle style = TextStyle(fontSize: 17.0, color: Colors.white);
   bool isInput = false;
+  
 
   @override
   Widget build(BuildContext context) {
