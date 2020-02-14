@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/lecture_code.dart';
 
 
 class LectureMain extends StatelessWidget {
@@ -91,7 +92,12 @@ class LectureMain extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LectureCode()),
+          );
+        },
         child: Icon(Icons.add),
         backgroundColor: Color(0xFF4F57FF),
       ),

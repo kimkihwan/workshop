@@ -160,9 +160,9 @@ class _LoginPage extends State<LoginPage> {
             GestureDetector(
               onTap: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LectureMain()),
-                  );
+                  context,
+                  MaterialPageRoute(builder: (context) => LectureMain()),
+                );
               },
               child: 
               Container(
