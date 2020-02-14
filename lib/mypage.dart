@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workshop/lecture.dart';
+import 'package:workshop/old_lecture.dart';
 
 class BodyLayout extends StatefulWidget {
   @override

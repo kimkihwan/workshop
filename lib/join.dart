@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:workshop/lecture.dart';
+import 'package:workshop/old_lecture.dart';
 import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
