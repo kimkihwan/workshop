@@ -7,14 +7,11 @@ class LoginMain extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-       statusBarColor: Colors.white,
-    ));
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //    statusBarColor: Colors.white,
+    // ));
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-      ),
       body: Container(
         constraints: BoxConstraints.expand(),
         decoration: BoxDecoration(
@@ -58,8 +55,8 @@ class LoginMain extends StatelessWidget {
               ),
             ),
             Container(
-              width: 131,
-              height: 33,
+              width: 140,
+              height: 50,
               margin: EdgeInsets.only(left: 41, top: 11),
               child: Text("준비물까지 준비해주는\n온라인 클래스", style: TextStyle(color: Color(0xFF939AC2)),)
             ),
@@ -78,7 +75,7 @@ class LoginMain extends StatelessWidget {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     height: 58,
-                    margin: EdgeInsets.only(left: 20, right: 20, top: 350),
+                    margin: EdgeInsets.only(left: 20, right: 20, top: 100),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -171,7 +168,6 @@ class LoginMain extends StatelessWidget {
                 fit: BoxFit.none,
               ),
             ),
-            Spacer(),
           ],
         ),
       ),
