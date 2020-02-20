@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:workshop/mypage.dart';
+import 'package:workshop/old_mypage.dart';
 
 
 class DetailLec extends StatelessWidget {

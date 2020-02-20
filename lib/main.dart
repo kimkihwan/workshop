@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workshop/login.dart';
-import 'package:workshop/lecture_detail.dart';
+import 'package:workshop/menu.dart';
 
 void main() => runApp(App());
 

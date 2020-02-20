@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/lecture.dart';
 import 'package:workshop/pin/pin_put.dart';
-
+import 'package:workshop/lecture_detail.dart';
 
 class LectureCode extends StatefulWidget {
   LectureCode({Key key, this.title}) : super(key: key);
@@ -21,6 +22,10 @@ class _Pinstate extends State<LectureCode> {
 
     final joinButton = GestureDetector(
       onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DaliyViewWidget()),
+        );
       },
       child: 
       Container(

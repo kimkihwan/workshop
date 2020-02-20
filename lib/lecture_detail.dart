@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:workshop/values/values.dart';
+import 'package:workshop/menu.dart';
 
 
 class DaliyViewWidget extends StatelessWidget {
@@ -121,10 +120,16 @@ class DaliyViewWidget extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           child: AppBar(
+            iconTheme: IconThemeData(color: Color(0xFF35D0BA)),
             backgroundColor: Colors.black,
             actions: <Widget>[
               FlatButton(
-                onPressed: null,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MenuViewWidget()),
+                  );
+                },
                 child: Icon(Icons.menu, color: Color(0xFF475AEF)),
               )
             ],
