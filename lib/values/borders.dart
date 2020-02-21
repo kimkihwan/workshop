@@ -23,4 +23,14 @@ class Borders {
     width: 2,
     style: BorderStyle.solid,
   );
+  static const BorderSide reply_border = BorderSide(
+    color: Color.fromARGB(255, 79, 87, 255),
+    width: 1,
+    style: BorderStyle.solid,
+  );
+  static const BorderSide search_border = BorderSide(
+    color: Color.fromARGB(255, 218, 218, 218),
+    width: 1,
+    style: BorderStyle.solid,
+  );
 }
