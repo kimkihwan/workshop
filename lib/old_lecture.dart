@@ -1,7 +1,7 @@
 import 'package:workshop/pin/pin_put.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:workshop/lec_detail.dart';
+import 'package:workshop/old_lec_detail.dart';
 
 class LectureMain extends StatelessWidget {
 

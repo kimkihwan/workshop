@@ -13,4 +13,14 @@ class Borders {
     width: 2,
     style: BorderStyle.solid,
   );
+  static const BorderSide leader_border = BorderSide(
+    color: Color.fromARGB(255, 255, 185, 79),
+    width: 2,
+    style: BorderStyle.solid,
+  );
+  static const BorderSide member_border = BorderSide(
+    color: Color.fromARGB(255, 79, 87, 255),
+    width: 2,
+    style: BorderStyle.solid,
+  );
 }

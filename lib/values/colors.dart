@@ -3,6 +3,7 @@ import 'dart:ui';
 
 
 class AppColors {
+  static const Color blueBackground = Color.fromARGB(255, 79, 87, 255);
   static const Color primaryBackground = Color.fromARGB(255, 255, 255, 255);
   static const Color secondaryBackground = Color.fromARGB(255, 246, 246, 246);
   static const Color ternaryBackground = Color.fromARGB(179, 0, 0, 0);
