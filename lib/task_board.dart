@@ -2,9 +2,13 @@
 import 'package:flutter/material.dart';
 import 'package:workshop/values/values.dart';
 
+class TaskBoardViewWidget extends StatefulWidget {
+  @override
+  _TaskBoardViewWidgetState createState() => _TaskBoardViewWidgetState();
+}
 
-class TaskBoardViewWidget extends StatelessWidget {
-  
+class _TaskBoardViewWidgetState extends State<TaskBoardViewWidget> {
+
   void onRectangleTwoPressed(BuildContext context) {
   
   }
@@ -13,9 +17,13 @@ class TaskBoardViewWidget extends StatelessWidget {
   
   }
   
+  String selectOrder = "등록순";
+
+  List<String> orders = ["등록순", "날짜순", "과제순", "팀순"];
+
+
   @override
   Widget build(BuildContext context) {
-  
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Color(0xFF4F57FF)),
@@ -39,25 +47,17 @@ class TaskBoardViewWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  width: 71,
+                  width: 80,
                   height: 60,
-                  margin: EdgeInsets.only(left: 5, top: 18),
+                  margin: EdgeInsets.only(left: 5, top: 10),
                   child: Stack(
                     alignment: Alignment.center,
                     children: [
                       Positioned(
-                        left: 52,
-                        top: 14,
-                        child: Image.asset(
-                          "assets/images/order_icon.png",
-                          fit: BoxFit.none,
-                        ),
-                      ),
-                      Positioned(
                         left: 0,
-                        top: 0,
+                        top: 8,
                         child: Container(
-                          width: 71,
+                          width: 80,
                           height: 33,
                           decoration: BoxDecoration(
                             border: Border.fromBorderSide(Borders.secondaryBorder),
@@ -68,10 +68,21 @@ class TaskBoardViewWidget extends StatelessWidget {
                       ),
                       Positioned(
                         left: 12,
-                        top: 12,
-                        child: Image.asset(
-                          "assets/images/order.png",
-                          fit: BoxFit.none,
+                        top: 0,
+                        child: DropdownButton<String>(
+                          underline: SizedBox(),
+                          value: selectOrder,
+                          onChanged: (String Value) {
+                            setState(() {
+                              selectOrder = Value;
+                            });
+                          },
+                          items: orders.map((String user) {
+                            return  DropdownMenuItem<String>(
+                              value: user,
+                              child: Text(user, style: TextStyle(fontSize: 15, color: Color(0xFF4F57FF)))
+                            );
+                          }).toList(),
                         ),
                       ),
                     ],
