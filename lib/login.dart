@@ -70,7 +70,7 @@ class LoginMain extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (context) => LoginPage()),
                     );
-                },
+                  },
                   child: 
                   Container(
                     width: MediaQuery.of(context).size.width,

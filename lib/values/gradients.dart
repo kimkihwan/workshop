@@ -4,8 +4,8 @@ import 'package:flutter/rendering.dart';
 
 class Gradients {
   static const Gradient primaryGradient = LinearGradient(
-    begin: Alignment(0, 1),
-    end: Alignment(1, 1),
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
     stops: [
       0.22727,
       0.77273,

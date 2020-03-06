@@ -90,7 +90,7 @@ class _TaskBoardViewWidgetState extends State<TaskBoardViewWidget> {
                 ),
                 Spacer(),
                 Container(
-                  width: 270,
+                  width: 220,
                   height: 33,
                   margin: EdgeInsets.only(top: 18, right: 0),
                   child: Stack(
@@ -100,9 +100,9 @@ class _TaskBoardViewWidgetState extends State<TaskBoardViewWidget> {
                         top: 0,
                         right: 0,
                         child: Container(
-                          width: 270,
+                          width: 220,
                           height: 33,
-                          padding: EdgeInsets.only(left:10),
+                          padding: EdgeInsets.only(left:10, bottom: 4),
                           decoration: BoxDecoration(
                             border: Border.fromBorderSide(Borders.primaryBorder),
                             borderRadius: BorderRadius.all(Radius.circular(16.5)),
@@ -202,7 +202,7 @@ class _TaskBoardViewWidgetState extends State<TaskBoardViewWidget> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "한기헌",
+                                      "한기헌    2020.01.09. 22:19",
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         color: Color.fromARGB(255, 136, 136, 136),
@@ -215,41 +215,9 @@ class _TaskBoardViewWidgetState extends State<TaskBoardViewWidget> {
                                   Align(
                                     alignment: Alignment.topLeft,
                                     child: Container(
-                                      margin: EdgeInsets.only(left: 10, top: 3),
-                                      child: Text(
-                                        "2020.01.09. 22:19",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: Color.fromARGB(255, 136, 136, 136),
-                                          fontFamily: "Apple SD Gothic Neo",
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Container(
                                       margin: EdgeInsets.only(left: 15),
                                       child: Text(
-                                        "조회",
-                                        textAlign: TextAlign.left,
-                                        style: TextStyle(
-                                          color: Color.fromARGB(255, 136, 136, 136),
-                                          fontFamily: "Apple SD Gothic Neo",
-                                          fontWeight: FontWeight.w400,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.topLeft,
-                                    child: Container(
-                                      margin: EdgeInsets.only(left: 6, top: 3),
-                                      child: Text(
-                                        "17",
+                                        "조회 17",
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           color: Color.fromARGB(255, 136, 136, 136),

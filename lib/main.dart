@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:workshop/login.dart';
-import 'package:workshop/task_detail.dart';
+import 'package:workshop/join_email_view.dart';
+
 
 void main() => runApp(App());
 
@@ -9,7 +9,8 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TaskDetailViewWidget(),
+      theme: ThemeData.dark(),
+      home: JoinEmailViewWidget(),
     );
   }
 }
