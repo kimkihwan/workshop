@@ -1,0 +1,180 @@
+import 'package:flutter/material.dart';
+import 'package:workshop/join_view/join_check_view.dart';
+import 'package:workshop/join_view/join_first_view.dart';
+import 'package:workshop/values/values.dart';
+import 'package:workshop/login_view/login_page.dart';
+
+class LoginMain extends StatelessWidget {
+  
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 0, 0, 0),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Spacer(),
+            Container(
+              width: 139,
+              height: 36,
+              margin: EdgeInsets.only(left: 40, top: 39),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: 75,
+                      height: 36,
+                      child: Image.asset(
+                        "assets/images/shape-51.png",
+                        fit: BoxFit.none,
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      width: 60,
+                      height: 33,
+                      margin: EdgeInsets.only(left: 3, top: 3),
+                      child: Image.asset(
+                        "assets/images/shape-95.png",
+                        fit: BoxFit.none,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: 140,
+              height: 50,
+              margin: EdgeInsets.only(left: 41, top: 11),
+              child: Text("준비물까지 준비해주는\n온라인 클래스", style: TextStyle(color: Color(0xFF939AC2)),)
+            ),
+            Spacer(),
+            Align(
+              alignment: Alignment.topCenter,
+              child: 
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  },
+                  child: 
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 58,
+                    margin: EdgeInsets.only(left: 20, right: 20, top: 100),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.centerLeft, //Alignment(0, 0.5),
+                                end: Alignment.centerRight, //Alignment(1, 0.5),
+                                stops: [
+                                  0.15625,
+                                  0.94375,
+                                ],
+                                colors: [
+                                  Color.fromARGB(255, 53, 207, 187),
+                                  Color.fromARGB(255, 71, 90, 239),
+                                ],
+                              ),
+                              borderRadius: BorderRadius.all(Radius.circular(30)),
+                            ),
+                            child: Container()
+                          ),
+                        ),
+                        Positioned(
+                          top: 24,
+                          child: Text("로그인", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
+                        ),
+                      ],
+                    ),
+                  )   
+                )           
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: 
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => JoinCheckViewWidget()),
+                  );
+                },
+                child:
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 58,
+                  margin: EdgeInsets.only(top: 13, left: 20, right: 20),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 58,
+                          decoration: BoxDecoration(
+                            border: Border.fromBorderSide(Borders.secondaryBorder),
+                            borderRadius: BorderRadius.all(Radius.circular(29)),
+                          ),
+                          child: Container(),
+                        ),
+                      ),
+                      Positioned(
+                        top: 23,
+                        child: Text(
+                          "회원가입", 
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              
+            ),
+            Spacer(),
+            Container(
+              width: 102,
+              height: 12,
+              margin: EdgeInsets.only(left:30),
+              child: Image.asset(
+                "assets/images/2020magiceco.png",
+                fit: BoxFit.none,
+              ),
+            ),
+            Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+}
