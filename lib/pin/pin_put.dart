@@ -19,7 +19,7 @@ class PinPut extends StatefulWidget {
     this.textCapitalization = TextCapitalization.none,
     this.inputDecoration = const InputDecoration(
         contentPadding:
-            EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
+            EdgeInsets.only(left: 5.0, right: 5.0, top: 5.0, bottom: 5.0),
         border: OutlineInputBorder(),
         filled: true,
         fillColor: Color(0xFF1F2232),

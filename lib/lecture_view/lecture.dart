@@ -1,18 +1,89 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture_code.dart';
 import 'package:workshop/lecture_view/lecture_detail.dart';
 
 
 class LectureMain extends StatefulWidget {
-  LectureMain({Key key, this.isAdd}) : super(key: key);
+  LectureMain({person}) : this.person = person ?? User();
 
-  bool isAdd;
+  User person;
 
   @override
   _LectureMainState createState() => _LectureMainState();
 }
 
 class _LectureMainState extends State<LectureMain> {
+
+  Widget lesson_view(company, name, thumbnail) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DailyViewWidget(),
+          )
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.only(left:10, right:10, top:20, bottom: 20),
+        width: double.infinity,
+        height: 100,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          border: Border.all(
+            color:Colors.white
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(30)),
+        ),
+        child: Center(
+          child: ListTile(
+            contentPadding: EdgeInsets.only(top:20, bottom:20, left:20),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Text(
+                  company, 
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  )
+                ),
+                // SizedBox(height:10),
+                Text(
+                  name, 
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold            
+                  )
+                ),
+                Container()
+              ],
+            ),
+            leading: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  color:Colors.white
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.network(
+                  thumbnail,
+                  fit: BoxFit.fitHeight,
+                ),
+            )
+          ),
+        ),
+        )
+      )
+    );
+  }
 
   Future _awaitReturnValue(BuildContext context) async {
 
@@ -26,79 +97,6 @@ class _LectureMainState extends State<LectureMain> {
    }
   @override
   Widget build(BuildContext context) {
-
-    var lectureButton = Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DailyViewWidget(),
-              )
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.only(left:10, right:10, top:20, bottom: 20),
-            width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              border: Border.all(
-                color:Colors.white
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
-            child: Center(
-              child: ListTile(
-              contentPadding: EdgeInsets.only(top:20, bottom:20, left:20),
-              title: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  Text(
-                    "SK그룹 AI 입문과정", 
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    )
-                  ),
-                  // SizedBox(height:10),
-                  Text(
-                    "AI-Workshop", 
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold            
-                    )
-                  ),
-                  Container()
-                ],
-              ),
-              leading: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color:Colors.white
-                  ),
-                  borderRadius: BorderRadius.all(Radius.circular(15)),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15.0),
-                  child: Image.asset(
-                    'assets/sk.png',
-                    fit: BoxFit.fitHeight,
-                  ),
-                )
-              ),
-            ),
-            )
-          )
-        )
-      ],
-    );
 
     var emptyLecture = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,6 +169,45 @@ class _LectureMainState extends State<LectureMain> {
         Spacer(),
       ],
     );
+
+    var lectureButton = Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DailyViewWidget(),
+              )
+            );
+          },
+          child: Container(
+            margin: EdgeInsets.only(left:10, right:10, top:20, bottom: 20),
+            width: double.infinity,
+            height: 100,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              border: Border.all(
+                color:Colors.white
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(30)),
+            ),
+            child: Center(
+              child: 
+                ListView.builder(itemBuilder: (BuildContext context, int i)
+                {
+                  return lesson_view(
+                    widget.person.lesson_list[i].company,
+                    widget.person.lesson_list[i].name,
+                    widget.person.lesson_list[i].thumbnail
+                  );
+                }),
+            )
+          )
+        )
+      ],
+    );
     
     return Scaffold(
       appBar: AppBar(
@@ -184,7 +221,7 @@ class _LectureMainState extends State<LectureMain> {
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 0, 0, 0),
         ),
-        child: widget.isAdd? lectureButton:emptyLecture
+        child: widget.person.lesson_list.length!=0? lectureButton:emptyLecture  
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

@@ -143,6 +143,7 @@ class _Pinstate extends State<LectureCode> {
   }
 
   void _changeButton(String pin) {
+    print(pin);
     setState(() {
       isInput = true;
     });

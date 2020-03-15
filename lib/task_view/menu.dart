@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture.dart';
 import 'package:workshop/task_view/noti_board.dart';
 import 'package:workshop/task_view/task_board.dart';
@@ -9,6 +10,9 @@ import 'package:link/link.dart';
 
 class MenuViewWidget extends StatelessWidget {
   
+  User person;
+
+  MenuViewWidget({person}) : this.person = person ?? User();
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +184,7 @@ class MenuViewWidget extends StatelessWidget {
                 onTap: () {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LectureMain(isAdd: true)),
+                    MaterialPageRoute(builder: (context) => LectureMain()),
                   );
                 },
                 child:Text("강의 목록", style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), textAlign: TextAlign.center)

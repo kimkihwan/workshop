@@ -42,7 +42,7 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
       if(check=='Y') {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LectureMain()),
+          MaterialPageRoute(builder: (context) => LectureMain(person: widget.person)),
         );
       }
     }
@@ -51,10 +51,10 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
 
   _makePostRequest() async {
 
-    var stream = http.ByteStream(DelegatingStream.typed(widget.person.photo.openRead()));
-    var length = await widget.person.photo.length();
+    var stream = http.ByteStream(DelegatingStream.typed(widget.person.user_file.openRead()));
+    var length = await widget.person.user_file.length();
     var multipartFile = new http.MultipartFile('photo', stream, length,
-          filename: widget.person.photo.path.split('/').last);
+          filename: widget.person.user_file.path.split('/').last);
 
     Map<String, String> headers = {
       'Content-Type': 'multipart/form-data',
@@ -116,7 +116,7 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
           onTap: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => LectureMain(isAdd: false)),
+              MaterialPageRoute(builder: (context) => LectureMain()),
             );
           },
           child: Center(

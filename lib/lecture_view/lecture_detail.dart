@@ -3,32 +3,67 @@ import 'package:workshop/lecture_view/lecture.dart';
 import 'package:workshop/task_view/menu.dart';
 import 'package:workshop/task_view/task_upload.dart';
 import 'package:workshop/test_view/test_start_view_widget.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+
 
 
 class DailyViewWidget extends StatefulWidget {
+
+  DailyViewWidget({lesson_no, token}) : this.lesson_no = lesson_no ?? 2;
+
+  int lesson_no;
+  String token;
+
   @override
   _DailyViewWidgetState createState() => _DailyViewWidgetState();
 }
 
 class _DailyViewWidgetState extends State<DailyViewWidget> {
+
+  @override
+  void initState() {
+    _makeGetRequest();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  _makeGetRequest() async {
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'Bearer Token': widget.token
+    };
+
+    // set up POST request arguments
+    var url = 'https://withai.10make.com/api/lesson/${widget.lesson_no}/home';
+    // make GET request
+    Response response = await get(url, headers: headers);
+
+    int statusCode = response.statusCode;
+    // this API passes back the id of the new item added to the body
+    if (statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+
+      for(Map<String, dynamic> i in jsonResponse['days']) {
+        _daliyTitle.insert(i['day']-1, i['name']);
+      }
+
+      for(Map<String, dynamic> i in jsonResponse['data']) {
+        _listViewData.add(LectureData(i['name'], i['day'], i['start'], i['end'], i['submit'], i['key'], i['type']));
+      }
+      
+    }
+  }
+
   static final List<String> _daliyTitle = [
-    '산업 도메인과 AI의 결합',
-    'AI 산업에서의 UX/UI',
-    'AI 아키텍처와 상품화'
   ];
 
-  static final List<String> _listViewData = [
-    'AI-Workshop 사전 설문조사',
-    '워크샵 - AI 모델 만들기',
-    '티쳐블머신 활용해서 비전인식 학습',
-    'WebRTC 활용해서 음성인식 학습 이해하기'
-  ];
-
-  static final List<String> _listDatatype = [
-    '설문조사',
-    '1차 과제',
-    '2차 과제',
-    '3차 과제',
+  static final List<LectureData> _listViewData = [
   ];
 
   List<ExpansionTile> _listOfExpansions = List<ExpansionTile>.generate(
@@ -53,56 +88,81 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
               scrollDirection: Axis.vertical,
               itemCount: _listViewData.length,
               itemBuilder: (BuildContext context, int i) {
-                return Column(
-                  children: <Widget>[
-                    Divider(),
-                    ListTile(
-                      dense: true,
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[                         
-                          Text(_listDatatype[i], style: TextStyle(color: Colors.black, fontSize:13, fontWeight: FontWeight.bold)),
-                          SizedBox(height:5),
-                          Text(_listViewData[i], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                          SizedBox(height:5),
-                          Text("2020년 00월 00일까지 제출", style: TextStyle(color: Color(0xFF979797))),
-                          SizedBox(height:5),
-                        ],
-                      ),
-                      trailing: 
-                        FlatButton(
-                          onPressed: () {
-                            if (i == 0) {
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => TestStartViewWidget())
-                              );
-                            } else {
-                              Navigator.push(
-                                context, 
-                                MaterialPageRoute(builder: (context) => TaskUploadViewWidget())
-                              );
-                            }
-                          },
-                          color: Color(0xFF35D0BA),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20)),
-                          ),
-                          textColor: Colors.white,
-                          padding: EdgeInsets.all(0),
-                          child: Text(
-                            "미제출",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
+                if(i+1==_listViewData[i].day) {
+                  return Column(
+                    children: <Widget>[
+                      Divider(),
+                      ListTile(
+                        dense: true,
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[             
+                            Text(_listViewData[i].type, style: TextStyle(color: Colors.black, fontSize:13, fontWeight: FontWeight.bold)),
+                            SizedBox(height:5),
+                            Text(_listViewData[i].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                            SizedBox(height:5),
+                            Text("${_listViewData[i].end}까지 제출", style: TextStyle(color: Color(0xFF979797))),
+                            SizedBox(height:5),
+                          ],
+                        ),
+                        trailing: 
+                          FlatButton(
+                            onPressed: () {
+                              if (_listViewData[i].type == "survey") {
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => TestStartViewWidget())
+                                );
+                              }
+                              else if(_listViewData[i].type == "application") {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false, // user must tap button for close dialog!
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      content: Text(
+                                          "PC를 이용해주세요.", textAlign: TextAlign.center,),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                          child: Text('확인', style: TextStyle(color: Colors.white)),
+                                          onPressed: () => Navigator.of(context).pop()
+                                        )
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                              else {
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => TaskUploadViewWidget())
+                                );
+                              }
+                            },
+                            color: _listViewData[i].submit==0?Color(0xFF35D0BA):Color(0xFF4F57FF),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(20)),
+                            ),
+                            textColor: Colors.white,
+                            padding: EdgeInsets.all(0),
+                            child: Text(
+                              _listViewData[i].submit==0?
+                              "미제출"
+                              :"제출완료",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+                              ),
                             ),
                           ),
-                        ),
-                    )
-                  ]
-                );
+                      )
+                    ]
+                  );
+                }
+                else
+                  Container();
               }
             )
           )
@@ -122,7 +182,7 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LectureMain(isAdd: true)),
+                  MaterialPageRoute(builder: (context) => LectureMain()),
                 );
               },  
             ),
@@ -173,4 +233,15 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
       )
     );
   }
+}
+
+class LectureData {
+  String name;
+  int day;
+  String start;
+  String end;
+  int submit;
+  int key;
+  String type;
+  LectureData(this.name, this.day, this.start, this.end, this.submit, this.key, this.type);
 }

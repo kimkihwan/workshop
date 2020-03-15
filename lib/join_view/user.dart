@@ -8,5 +8,16 @@ class User {
   String sub;
   String dept;
   String position;
-  File photo;
+  String token;
+  bool email_check = false;
+  List<Lesson> lesson_list = [];
+  String photo;
+  File user_file;
+}
+
+class Lesson {
+  String name;
+  String company;
+  String thumbnail;
+  Lesson(this.name, this.company, this.thumbnail);
 }

@@ -121,7 +121,7 @@ class _JoinCameraViewWidgetState extends State<JoinCameraViewWidget> {
         ),
         GestureDetector(
           onTap: () {
-            widget.person.photo = _image;
+            widget.person.user_file = _image;
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => JoinEndViewWidget(person: widget.person)),

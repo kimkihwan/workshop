@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workshop/join_view/join_check_view.dart';
 import 'package:workshop/join_view/join_first_view.dart';
+import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -18,6 +19,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPage extends State<LoginPage> {
   TextStyle style = TextStyle(fontSize: 17.0, color: Colors.white);
   bool isInput = false;
+
+  User person = User();
 
   String _emailValue;
   String _passwordValue;
@@ -38,12 +41,21 @@ class _LoginPage extends State<LoginPage> {
     if (statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
+      person.name = jsonResponse['name'];
+      person.email_check = jsonResponse['email_verified_at'];
+      person.photo = jsonResponse['photo'];
+      person.sub = jsonResponse['sub'];
+      person.dept = jsonResponse['dept'];
+      person.phone = jsonResponse['phone'];
+      for(Map<String, dynamic> i in jsonResponse['my_lesson']) {
+        person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail']));
+      }
       var check = jsonResponse['error']['error'];
       print(check);
       if(check=='N') {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LectureMain(isAdd: false)),
+          MaterialPageRoute(builder: (context) => LectureMain(person: person)),
         );
       }
     }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:workshop/join_view/join_check_view.dart';
 import 'package:workshop/join_view/join_second_view.dart';
 import 'package:workshop/join_view/user.dart';
+import 'package:workshop/lecture_view/lecture_code.dart';
 import 'package:workshop/lecture_view/lecture_detail.dart';
 import 'package:workshop/login_view/login.dart';
 import 'package:workshop/task_view/menu.dart';
@@ -17,7 +18,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: LoginMain(),
+      home: LectureCode(),
     );
   }
 }
