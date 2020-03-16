@@ -26,7 +26,7 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
 
     Map<String, String> headers = {
       "Content-type": "application/json",
-      'Bearer Token': token
+      'Authorization': "Bearer ${widget.person.token}"
     };
 
     // set up POST request arguments
@@ -50,7 +50,6 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
   }
 
   _makePostRequest() async {
-
     var stream = http.ByteStream(DelegatingStream.typed(widget.person.user_file.openRead()));
     var length = await widget.person.user_file.length();
     var multipartFile = new http.MultipartFile('photo', stream, length,
@@ -85,17 +84,24 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
     if (statusCode == 200) {
       response.stream.transform(convert.utf8.decoder).listen((value) {
         final body = convert.json.decode(value);
+        widget.person.token = body['token'];
         Timer(Duration(seconds: 1), () {
+          print(body);
           _makeGetRequest(body['token']);
         });
       });
     }
-    
   }
 
   @override
   void initState() {
-    _makePostRequest();
+    if(widget.person.photo==null) {
+      _makePostRequest();
+    } else {
+      Timer(Duration(seconds: 1), () {
+        _makeGetRequest(widget.person.token);
+      });
+    }
     super.initState();
   }
 

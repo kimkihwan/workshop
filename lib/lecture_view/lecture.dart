@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture_code.dart';
 import 'package:workshop/lecture_view/lecture_detail.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 
 class LectureMain extends StatefulWidget {
@@ -14,6 +16,16 @@ class LectureMain extends StatefulWidget {
 }
 
 class _LectureMainState extends State<LectureMain> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   Widget lesson_view(company, name, thumbnail) {
     return GestureDetector(
@@ -85,16 +97,6 @@ class _LectureMainState extends State<LectureMain> {
     );
   }
 
-  Future _awaitReturnValue(BuildContext context) async {
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LectureCode(),
-      )
-    );
-
-   }
   @override
   Widget build(BuildContext context) {
 
@@ -183,16 +185,16 @@ class _LectureMainState extends State<LectureMain> {
             );
           },
           child: Container(
-            margin: EdgeInsets.only(left:10, right:10, top:20, bottom: 20),
+            margin: EdgeInsets.only(left:10, right:10, bottom: 20),
             width: double.infinity,
-            height: 100,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              border: Border.all(
-                color:Colors.white
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-            ),
+            height: 120,
+            // decoration: BoxDecoration(
+            //   color: Colors.black,
+            //   border: Border.all(
+            //     color:Colors.white
+            //   ),
+            //   borderRadius: BorderRadius.all(Radius.circular(30)),
+            // ),
             child: Center(
               child: 
                 ListView.builder(itemBuilder: (BuildContext context, int i)
@@ -225,7 +227,12 @@ class _LectureMainState extends State<LectureMain> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _awaitReturnValue(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LectureCode(person: widget.person),
+            )
+          );
         },
         child: Icon(Icons.add, color: Colors.white),
         backgroundColor: Color(0xFF4F57FF),

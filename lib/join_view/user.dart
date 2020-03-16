@@ -9,7 +9,7 @@ class User {
   String dept;
   String position;
   String token;
-  bool email_check = false;
+  String email_check;
   List<Lesson> lesson_list = [];
   String photo;
   File user_file;

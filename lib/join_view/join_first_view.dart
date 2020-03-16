@@ -38,6 +38,7 @@ class _JoinFirstViewState extends State<JoinFirstView> {
     if (statusCode == 200) {
       var jsonResponse = convert.jsonDecode(response.body);
       var check = jsonResponse['error'];
+      print(check);
       if (check == 'N') {
         isCheck = true;
         showDialog(
@@ -81,7 +82,7 @@ class _JoinFirstViewState extends State<JoinFirstView> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final passwordValidator = MultiValidator([  
+  final passwordValidator = MultiValidator([
     RequiredValidator(errorText: '비밀번호를 입력해주세요.'),  
     MinLengthValidator(5, errorText: '6자 이상, 영문 소문자/숫자 조합을 사용해주세요. 특수문자 사용불가'),  
     PatternValidator(r'^[a-z]+[0-9]+$', errorText: '6자 이상, 영문 소문자/숫자 조합을 사용해주세요. 특수문자 사용불가'),
@@ -291,7 +292,7 @@ class _JoinFirstViewState extends State<JoinFirstView> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width,
-                height: 375,
+                height: 230,
                 margin: EdgeInsets.only(left: 35, top: 5, right: 20),
                 child: Form(
                   key: _formKey,

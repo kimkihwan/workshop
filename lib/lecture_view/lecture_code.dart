@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/join_view/user.dart';
 import 'package:workshop/pin/pin_put.dart';
 import 'package:workshop/lecture_view/lecture_detail.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+
 
 class LectureCode extends StatefulWidget {
-  LectureCode({Key key, this.title}) : super(key: key);
+  
+  LectureCode({person}) : this.person = person ?? User();
 
-  final String title;
+  User person;
 
   @override
   _Pinstate createState() => _Pinstate();
@@ -15,17 +20,79 @@ class _Pinstate extends State<LectureCode> {
 
   TextStyle style = TextStyle(fontSize: 17.0);
   bool isInput = false;
+  String lectureCode;
+
+  popUp(text) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false, // user must tap button for close dialog!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(
+              text, textAlign: TextAlign.center,),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('확인', style: TextStyle(color: Colors.white)),
+              onPressed: () => Navigator.of(context).pop()
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  _makePostRequest() async {
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'Authorization': "Bearer ${widget.person.token}"
+    };
+    print(headers);
+    var body = '{"lesson_code":"${lectureCode}"}';
+    // set up POST request arguments
+    var url = 'https://withai.10make.com/api/enroll/lesson';
+    // make GET request
+    Response response = await post(url, headers: headers, body: body);
+
+    int statusCode = response.statusCode;
+    // this API passes back the id of the new item added to the body
+    if (statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      print(jsonResponse);
+      var check = jsonResponse['error'];
+      var lesson_no = jsonResponse['lesson_no'];
+      print(check);
+      if(check=='N') {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => DailyViewWidget(
+            lesson_no: lesson_no, person: widget.person.token)),
+        );
+      }
+      else if(check=='AE') {
+        popUp("이미 등록된 강의입니다.");
+      }
+      else if(check=="NLC") {
+        popUp("강의 코드를 입력해주세요.");
+      }
+      else if(check=="NVC") {
+        popUp("강의 코드를 잘못 입력하셨습니다.");
+      }
+      else {
+        popUp("서버에 문제가 있으니 잠시 후에 시도해주세요.");
+      }
+    }
+    else {
+      popUp("서버에 문제가 있으니 잠시 후에 시도해주세요.");
+    }
+    
+  }
 
   @override
   Widget build(BuildContext context) {
 
     final joinButton = GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => DailyViewWidget()),
-        );
-      },
+      onTap: _makePostRequest,
       child: 
       Container(
         width: double.infinity,
@@ -143,9 +210,9 @@ class _Pinstate extends State<LectureCode> {
   }
 
   void _changeButton(String pin) {
-    print(pin);
     setState(() {
       isInput = true;
+      lectureCode = pin;
     });
   }
 }

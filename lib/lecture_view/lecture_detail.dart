@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture.dart';
 import 'package:workshop/task_view/menu.dart';
 import 'package:workshop/task_view/task_upload.dart';
@@ -10,10 +11,10 @@ import 'dart:convert';
 
 class DailyViewWidget extends StatefulWidget {
 
-  DailyViewWidget({lesson_no, token}) : this.lesson_no = lesson_no ?? 2;
+  DailyViewWidget({person, this.lesson_no}) : this.person = person ?? User();
 
+  User person;
   int lesson_no;
-  String token;
 
   @override
   _DailyViewWidgetState createState() => _DailyViewWidgetState();
@@ -36,7 +37,7 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
 
     Map<String, String> headers = {
       "Content-type": "application/json",
-      'Bearer Token': widget.token
+      'Authorization': "Bearer ${widget.person.token}"
     };
 
     // set up POST request arguments
@@ -139,14 +140,20 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                                 );
                               }
                             },
-                            color: _listViewData[i].submit==0?Color(0xFF35D0BA):Color(0xFF4F57FF),
+                            color: _listViewData[i].end.compareTo(DateTime.now())>0?
+                              Color(0xFF1F2232)
+                              :_listViewData[i].submit==0?
+                              Color(0xFF35D0BA)
+                              :Color(0xFF4F57FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(Radius.circular(20)),
                             ),
                             textColor: Colors.white,
                             padding: EdgeInsets.all(0),
                             child: Text(
-                              _listViewData[i].submit==0?
+                              _listViewData[i].end.compareTo(DateTime.now())>0?
+                              "제출마감"
+                              :_listViewData[i].submit==0?
                               "미제출"
                               :"제출완료",
                               textAlign: TextAlign.left,
@@ -217,7 +224,6 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                     ),
                   )
                 )
-                
               ],
             ),
             centerTitle: true,
@@ -238,8 +244,8 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
 class LectureData {
   String name;
   int day;
-  String start;
-  String end;
+  DateTime start;
+  DateTime end;
   int submit;
   int key;
   String type;

@@ -35,20 +35,24 @@ class _LoginPage extends State<LoginPage> {
     var url = 'https://withai.10make.com/api/login';
     // make GET request
     Response response = await post(url, headers: headers, body: body);
-    print("post");
+    // print(response.body);
     int statusCode = response.statusCode;
     // this API passes back the id of the new item added to the body
     if (statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      print(jsonResponse);
-      person.name = jsonResponse['name'];
-      person.email_check = jsonResponse['email_verified_at'];
-      person.photo = jsonResponse['photo'];
-      person.sub = jsonResponse['sub'];
-      person.dept = jsonResponse['dept'];
-      person.phone = jsonResponse['phone'];
-      for(Map<String, dynamic> i in jsonResponse['my_lesson']) {
-        person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail']));
+      // print(jsonResponse);
+      person.name = jsonResponse['user']['name'];
+      person.email_check = jsonResponse['user']['email_verified_at'];
+      person.photo = jsonResponse['user']['photo'];
+      person.sub = jsonResponse['user']['sub'];
+      person.dept = jsonResponse['user']['dept'];
+      person.phone = jsonResponse['user']['phone'];
+      person.token = jsonResponse['token'];
+      print('${person.token},${person.name}');
+      if(jsonResponse['my_lesson']!='') {
+        for(Map<String, dynamic> i in jsonResponse['my_lesson']) {
+          person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail']));
+        }
       }
       var check = jsonResponse['error']['error'];
       print(check);
