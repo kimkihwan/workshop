@@ -11,7 +11,7 @@ import 'dart:convert';
 
 class DailyViewWidget extends StatefulWidget {
 
-  DailyViewWidget({person, this.lesson_no}) : this.person = person ?? User();
+  DailyViewWidget({this.person, this.lesson_no});
 
   User person;
   int lesson_no;
@@ -44,31 +44,32 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
     var url = 'https://withai.10make.com/api/lesson/${widget.lesson_no}/home';
     // make GET request
     Response response = await get(url, headers: headers);
-
+    // print(url);
     int statusCode = response.statusCode;
+    // print(statusCode);
     // this API passes back the id of the new item added to the body
     if (statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-
+      // print(jsonResponse);
+      _daliyTitle.clear();
       for(Map<String, dynamic> i in jsonResponse['days']) {
         _daliyTitle.insert(i['day']-1, i['name']);
       }
-
+      _listViewData.clear();
       for(Map<String, dynamic> i in jsonResponse['data']) {
         _listViewData.add(LectureData(i['name'], i['day'], i['start'], i['end'], i['submit'], i['key'], i['type']));
-      }
-      
+      }      
     }
   }
 
-  static final List<String> _daliyTitle = [
+  static final List<dynamic> _daliyTitle = [
   ];
 
   static final List<LectureData> _listViewData = [
   ];
 
   List<ExpansionTile> _listOfExpansions = List<ExpansionTile>.generate(
-      3,
+      _daliyTitle.length,
       (i) => ExpansionTile(
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,13 +84,14 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
         children: [
           Container(
             color: Colors.white,
-            height: 91.0*_listViewData.length,
+            height: 200.0,
             child: ListView.builder(
               padding: EdgeInsets.only(left: 10),
               scrollDirection: Axis.vertical,
               itemCount: _listViewData.length,
-              itemBuilder: (BuildContext context, int i) {
-                if(i+1==_listViewData[i].day) {
+              itemBuilder: (BuildContext context, int j) {
+                // print(_listViewData[j].day);
+                if(i+1==_listViewData[j].day) {
                   return Column(
                     children: <Widget>[
                       Divider(),
@@ -98,24 +100,24 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[             
-                            Text(_listViewData[i].type, style: TextStyle(color: Colors.black, fontSize:13, fontWeight: FontWeight.bold)),
+                            Text(_listViewData[j].type, style: TextStyle(color: Colors.black, fontSize:13, fontWeight: FontWeight.bold)),
                             SizedBox(height:5),
-                            Text(_listViewData[i].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                            Text(_listViewData[j].name, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
                             SizedBox(height:5),
-                            Text("${_listViewData[i].end}까지 제출", style: TextStyle(color: Color(0xFF979797))),
+                            Text("${_listViewData[j].day}까지 제출", style: TextStyle(color: Color(0xFF979797))),
                             SizedBox(height:5),
                           ],
                         ),
                         trailing: 
                           FlatButton(
                             onPressed: () {
-                              if (_listViewData[i].type == "survey") {
+                              if (_listViewData[j].type == "survey") {
                                 Navigator.push(
                                   context, 
                                   MaterialPageRoute(builder: (context) => TestStartViewWidget())
                                 );
                               }
-                              else if(_listViewData[i].type == "application") {
+                              else if(_listViewData[j].type == "application") {
                                 showDialog(
                                   context: context,
                                   barrierDismissible: false, // user must tap button for close dialog!
@@ -140,9 +142,9 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                                 );
                               }
                             },
-                            color: _listViewData[i].end.compareTo(DateTime.now())>0?
+                            color: false?//_listViewData[i].end.compareTo(DateTime.now())>0?
                               Color(0xFF1F2232)
-                              :_listViewData[i].submit==0?
+                              :_listViewData[j].submit==0?
                               Color(0xFF35D0BA)
                               :Color(0xFF4F57FF),
                             shape: RoundedRectangleBorder(
@@ -151,9 +153,9 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                             textColor: Colors.white,
                             padding: EdgeInsets.all(0),
                             child: Text(
-                              _listViewData[i].end.compareTo(DateTime.now())>0?
+                              false?//_listViewData[i].end.compareTo(DateTime.now())>0?
                               "제출마감"
-                              :_listViewData[i].submit==0?
+                              :_listViewData[j].submit==0?
                               "미제출"
                               :"제출완료",
                               textAlign: TextAlign.left,
@@ -168,8 +170,6 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
                     ]
                   );
                 }
-                else
-                  Container();
               }
             )
           )
@@ -189,7 +189,7 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LectureMain()),
+                  MaterialPageRoute(builder: (context) => LectureMain(person: widget.person, check: false)),
                 );
               },  
             ),
@@ -244,8 +244,8 @@ class _DailyViewWidgetState extends State<DailyViewWidget> {
 class LectureData {
   String name;
   int day;
-  DateTime start;
-  DateTime end;
+  String start;
+  String end;
   int submit;
   int key;
   String type;

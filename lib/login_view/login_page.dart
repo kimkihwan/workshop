@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:workshop/join_view/join_check_view.dart';
+import 'package:workshop/join_view/join_email_view.dart';
 import 'package:workshop/join_view/join_first_view.dart';
 import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture.dart';
@@ -40,7 +41,7 @@ class _LoginPage extends State<LoginPage> {
     // this API passes back the id of the new item added to the body
     if (statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      // print(jsonResponse);
+      print(jsonResponse);
       person.name = jsonResponse['user']['name'];
       person.email_check = jsonResponse['user']['email_verified_at'];
       person.photo = jsonResponse['user']['photo'];
@@ -48,19 +49,25 @@ class _LoginPage extends State<LoginPage> {
       person.dept = jsonResponse['user']['dept'];
       person.phone = jsonResponse['user']['phone'];
       person.token = jsonResponse['token'];
-      print('${person.token},${person.name}');
+      // print('${person.token},${person.name}');
       if(jsonResponse['my_lesson']!='') {
         for(Map<String, dynamic> i in jsonResponse['my_lesson']) {
-          person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail']));
+          person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail'], i['lesson_no']));
         }
       }
       var check = jsonResponse['error']['error'];
-      print(check);
       if(check=='N') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => LectureMain(person: person)),
-        );
+        if (person.email_check==null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => JoinEmailViewWidget(person: person)),
+          );
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LectureMain(person: person, check: false)),
+          );
+        }
       }
     }
     else {
@@ -241,12 +248,11 @@ class _LoginPage extends State<LoginPage> {
             Container(
               width: double.infinity,
               height: 15,
-              margin: EdgeInsets.only(left: 96, right: 97, bottom: 101),
+              margin: EdgeInsets.only(bottom: 51),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Spacer(),
                   Align(
                     alignment: Alignment.center,
                     child: Container(
@@ -281,7 +287,6 @@ class _LoginPage extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  Spacer(),
                 ],
               ),
             ),

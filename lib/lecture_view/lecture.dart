@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:workshop/join_view/join_email_view.dart';
 import 'package:workshop/join_view/user.dart';
 import 'package:workshop/lecture_view/lecture_code.dart';
 import 'package:workshop/lecture_view/lecture_detail.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
+import 'package:workshop/login_view/login.dart';
+
 
 class LectureMain extends StatefulWidget {
-  LectureMain({person}) : this.person = person ?? User();
+  LectureMain({person, check}) : this.person = person ?? User();
 
   User person;
+
+  bool check;
 
   @override
   _LectureMainState createState() => _LectureMainState();
@@ -19,6 +24,10 @@ class _LectureMainState extends State<LectureMain> {
 
   @override
   void initState() {
+    if(widget.check==true)
+      _makePostRequest();
+    else
+      person = widget.person;
     super.initState();
   }
 
@@ -26,14 +35,75 @@ class _LectureMainState extends State<LectureMain> {
   void dispose() {
     super.dispose();
   }
+  
+  User person;
 
-  Widget lesson_view(company, name, thumbnail) {
+  _makePostRequest() async {
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+    };
+    var body = '{"email":"${widget.person.name}", "password":"${widget.person.password}"}';
+    // set up POST request arguments
+    var url = 'https://withai.10make.com/api/login';
+    // make GET request
+    Response response = await post(url, headers: headers, body: body);
+    // print(response.body);
+    int statusCode = response.statusCode;
+    // this API passes back the id of the new item added to the body
+    if (statusCode == 200) {
+      setState(() {
+        var jsonResponse = jsonDecode(response.body);
+        print(jsonResponse);
+        person.name = jsonResponse['user']['name'];
+        person.email_check = jsonResponse['user']['email_verified_at'];
+        person.photo = jsonResponse['user']['photo'];
+        person.sub = jsonResponse['user']['sub'];
+        person.dept = jsonResponse['user']['dept'];
+        person.phone = jsonResponse['user']['phone'];
+        person.token = jsonResponse['token'];
+        // print('${person.token},${person.name}');
+        if(jsonResponse['my_lesson']!='') {
+          for(Map<String, dynamic> i in jsonResponse['my_lesson']) {
+            person.lesson_list.add(Lesson(i['name'], i['company'], i['thumbnail'], i['lesson_no']));
+          }
+        }
+      });      
+    }
+    else {
+      showDialog(
+        context: context,
+        barrierDismissible: false, // user must tap button for close dialog!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: const Text(
+                '다시 로그인 해주세요.', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('확인', style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginMain()),
+                  );
+                }
+              )
+            ],
+          );
+        },
+      );
+    }
+    
+  }
+
+  Widget lesson_view(company, name, thumbnail, lesson_no) {
     return GestureDetector(
       onTap: () {
+        print(lesson_no);
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DailyViewWidget(),
+            builder: (context) => DailyViewWidget(person: person, lesson_no: lesson_no),
           )
         );
       },
@@ -133,26 +203,13 @@ class _LectureMainState extends State<LectureMain> {
                   width: 17,
                   height: 17,
                   margin: EdgeInsets.only(right: 5),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Image.asset(
-                          "assets/images/path-24.png",
-                          fit: BoxFit.none,
-                        ),
-                      ),
-                      Positioned(
-                        top: 4,
-                        right: 4,
-                        child: Image.asset(
-                          "assets/images/path-2.png",
-                          fit: BoxFit.none,
-                        ),
-                      ),
-                    ],
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xFF4F57FF),
+                  ),
+                  child: Image.asset(
+                    "assets/images/path-2.png",
+                    fit: BoxFit.none,
                   ),
                 ),
               ),
@@ -175,37 +232,24 @@ class _LectureMainState extends State<LectureMain> {
     var lectureButton = Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => DailyViewWidget(),
-              )
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.only(left:10, right:10, bottom: 20),
-            width: double.infinity,
-            height: 120,
-            // decoration: BoxDecoration(
-            //   color: Colors.black,
-            //   border: Border.all(
-            //     color:Colors.white
-            //   ),
-            //   borderRadius: BorderRadius.all(Radius.circular(30)),
-            // ),
-            child: Center(
-              child: 
-                ListView.builder(itemBuilder: (BuildContext context, int i)
+        Container(
+          margin: EdgeInsets.only(left:10, right:10, bottom: 20),
+          width: double.infinity,
+          height: 130.0*person.lesson_list.length,
+          child: Center(
+            child: 
+              ListView.builder(
+                itemCount: person.lesson_list.length,
+                itemBuilder: (BuildContext context, int i)
                 {
                   return lesson_view(
-                    widget.person.lesson_list[i].company,
-                    widget.person.lesson_list[i].name,
-                    widget.person.lesson_list[i].thumbnail
+                    person.lesson_list[i].company,
+                    person.lesson_list[i].name,
+                    person.lesson_list[i].thumbnail,
+                    person.lesson_list[i].lesson_no
                   );
-                }),
-            )
+                }
+              ),
           )
         )
       ],
@@ -223,7 +267,7 @@ class _LectureMainState extends State<LectureMain> {
         decoration: BoxDecoration(
           color: Color.fromARGB(255, 0, 0, 0),
         ),
-        child: widget.person.lesson_list.length!=0? lectureButton:emptyLecture  
+        child: person.lesson_list.length!=0? lectureButton:emptyLecture  
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

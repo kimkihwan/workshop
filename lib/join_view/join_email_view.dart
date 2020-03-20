@@ -22,7 +22,7 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
     with SingleTickerProviderStateMixin {
 
   
-  _makeGetRequest(token) async {
+  _makeGetRequest() async {
 
     Map<String, String> headers = {
       "Content-type": "application/json",
@@ -44,6 +44,31 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
           context,
           MaterialPageRoute(builder: (context) => LectureMain(person: widget.person)),
         );
+      }
+    }    
+  }
+
+  _makeGetEmailRequest() async {
+
+    Map<String, String> headers = {
+      "Content-type": "application/json",
+      'Authorization': "Bearer ${widget.person.token}"
+    };
+
+    // set up POST request arguments
+    var url = 'https://withai.10make.com/api/email/resend';
+    // make GET request
+    http.Response response = await http.get(url, headers: headers);
+
+    int statusCode = response.statusCode;
+    // this API passes back the id of the new item added to the body
+    if (statusCode == 200) {
+      var jsonResponse = convert.jsonDecode(response.body);
+      var check = jsonResponse['error'];
+      if(check=='N') {
+        Timer(Duration(seconds: 1), () {
+          _makeGetRequest();
+        });
       }
     }
     
@@ -86,8 +111,7 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
         final body = convert.json.decode(value);
         widget.person.token = body['token'];
         Timer(Duration(seconds: 1), () {
-          print(body);
-          _makeGetRequest(body['token']);
+          _makeGetRequest();
         });
       });
     }
@@ -96,11 +120,11 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
   @override
   void initState() {
     if(widget.person.photo==null) {
+      print("zxc");
       _makePostRequest();
     } else {
-      Timer(Duration(seconds: 1), () {
-        _makeGetRequest(widget.person.token);
-      });
+      _makeGetEmailRequest();
+      
     }
     super.initState();
   }
@@ -129,7 +153,8 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Expanded(child: Container()),
+                // Expanded(child: Container()),
+                Spacer(),
                 Container(
                   width: double.infinity,
                   height: 40,
@@ -205,7 +230,8 @@ class _JoinEmailViewWidgetState extends State<JoinEmailViewWidget>
                     ],
                   )
                 ),
-                Expanded(child: Container()),
+                // Expanded(child: Container()),
+                Spacer(),
               ],
             ),
           ),

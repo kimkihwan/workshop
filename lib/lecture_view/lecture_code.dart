@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:workshop/join_view/user.dart';
+import 'package:workshop/lecture_view/lecture.dart';
 import 'package:workshop/pin/pin_put.dart';
-import 'package:workshop/lecture_view/lecture_detail.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
@@ -60,13 +60,11 @@ class _Pinstate extends State<LectureCode> {
       var jsonResponse = jsonDecode(response.body);
       print(jsonResponse);
       var check = jsonResponse['error'];
-      var lesson_no = jsonResponse['lesson_no'];
       print(check);
       if(check=='N') {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => DailyViewWidget(
-            lesson_no: lesson_no, person: widget.person.token)),
+          MaterialPageRoute(builder: (context) => LectureMain(person: widget.person, check: true))
         );
       }
       else if(check=='AE') {

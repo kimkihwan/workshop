@@ -19,5 +19,6 @@ class Lesson {
   String name;
   String company;
   String thumbnail;
-  Lesson(this.name, this.company, this.thumbnail);
+  int lesson_no;
+  Lesson(this.name, this.company, this.thumbnail, this.lesson_no);
 }

@@ -58,6 +58,24 @@ class _JoinFirstViewState extends State<JoinFirstView> {
           },
         );
       }
+      else if (check == 'NAE') {
+        showDialog(
+          context: context,
+          barrierDismissible: false, // user must tap button for close dialog!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              content: const Text(
+                  '이메일 형식이 맞지 않습니다.', textAlign: TextAlign.center,),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('확인', style: TextStyle(color: Colors.white)),
+                  onPressed: () => Navigator.of(context).pop()
+                )
+              ],
+            );
+          },
+        );
+      }
       else {
         isCheck = false;
         showDialog(
